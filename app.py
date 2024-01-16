@@ -62,7 +62,7 @@ async def main(page: ft.Page) -> None:
         score.value = 0
         page.snack_bar = ft.SnackBar(
             content=ft.Text(
-                value='Пошел нахуй ущерб ебаный',
+                value='Получение ивента свапа навбара',
                 size=25,
                 color='#ff8b1f',
                 text_align=ft.TextAlign.CENTER
