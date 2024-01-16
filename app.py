@@ -3,7 +3,7 @@ import flet as ft
 
 
 async def main(page: ft.Page) -> None:
-    page.title = 'IvanCoin Clicker'
+    page.title = 'BoobsCoin'
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = '#141221'
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
@@ -23,11 +23,25 @@ async def main(page: ft.Page) -> None:
         score_counter.top = event.local_y
         score_counter.bottom = 0
         progress_bar.value += (1 / 100)
+
         if score.data % 100 == 0:
             page.snack_bar = ft.SnackBar(
                 content=ft.Text(
                     value='100 раз по сиськам ебанул',
-                    size=20,
+                    size=25,
+                    color="#ff8b1f",
+                    text_align=ft.TextAlign.CENTER
+                ),
+                bgcolor='#25223a'
+            )
+            page.snack_bar.open = True
+            progress_bar.value = 0
+
+        if score.data == 300:
+            page.snack_bar = ft.SnackBar(
+                content=ft.Text(
+                    value='300 раз! Секс-гигант',
+                    size=25,
                     color="#ff8b1f",
                     text_align=ft.TextAlign.CENTER
                 ),
@@ -44,10 +58,42 @@ async def main(page: ft.Page) -> None:
         await page.update_async()
 
 
-    score = ft.Text(value='0', size=100, data=0)
+    async def click_navbar(event: ft.ContainerTapEvent) -> None:
+        score.value = 0
+        page.snack_bar = ft.SnackBar(
+            content=ft.Text(
+                value='Пошел нахуй ущерб ебаный',
+                size=25,
+                color='#ff8b1f',
+                text_align=ft.TextAlign.CENTER
+            ),
+            bgcolor='#25223a'
+        )
+        page.snack_bar.open = True
+        await page.update_async()
+
+
+    score = ft.Text(value='0', size=60, data=0)
     score_counter = ft.Text(size=50, animate_opacity=ft.Animation(duration=600, curve=ft.AnimationCurve.BOUNCE_IN))
-    image = ft.Image(src='boobs.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
-    progress_bar = ft.ProgressBar(value=0, width=page.width-100, bar_height=20, color='#ff8b1f', bgcolor='#bf6524')
+    image = ft.Image(src='coin.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
+    progress_bar = ft.ProgressBar(value=0, width=page.width-60, bar_height=15, color='#ff8b1f', bgcolor='#bf6524')
+    navbar = ft.NavigationBar(
+        destinations=[
+            ft.NavigationDestination(icon=ft.icons.HOME_OUTLINED, 
+                                    selected_icon=ft.icons.HOME_ROUNDED, 
+                                    label='Boobs'),
+            ft.NavigationDestination(icon=ft.icons.LEADERBOARD_OUTLINED, 
+                                    selected_icon=ft.icons.LEADERBOARD, 
+                                    label='Leaderboard'),
+            ft.NavigationDestination(icon=ft.icons.ROCKET_LAUNCH_OUTLINED, 
+                                    selected_icon=ft.icons.ROCKET_LAUNCH_ROUNDED, 
+                                    label='Boost'),
+        ],
+        adaptive=True,
+        bgcolor='#141221',
+        height=65,
+        on_change=click_navbar
+    )
     
     await page.add_async(
         score,
@@ -58,9 +104,12 @@ async def main(page: ft.Page) -> None:
         ),
         ft.Container(
             content=progress_bar,
-            border_radius=ft.BorderRadius(10, 10, 10, 10)
-        )
+            border_radius=ft.BorderRadius(10, 10, 10, 10),
+            margin=ft.Margin(0, 0, 0, 75)
+        ),
+        navbar
     )
+    #page.navigation_bar = navbar
 
 
 if __name__ == '__main__':

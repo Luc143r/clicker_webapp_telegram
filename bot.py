@@ -1,7 +1,7 @@
 import asyncio
 
 from aiogram import Router, Bot, Dispatcher, F
-from aiogram.types import Message, WebAppInfo
+from aiogram.types import Message, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.filters import CommandStart
 from aiogram.enums import ParseMode
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -21,7 +21,7 @@ router = Router()
 @router.message(CommandStart())
 async def start(message: Message) -> None:
     await message.reply('Здарова заебал!',
-                        reply_markyp=webapp_builder())
+                        reply_markup=webapp_builder())
     
 async def main() -> None:
     bot = Bot(token=token, parse_mode=ParseMode.HTML)
