@@ -62,12 +62,36 @@ async def main(page: ft.Page) -> None:
         score.value = 0
         text = ''
         if int(event.data) == 0:
+            await page.clean_async()
+            await page.add_async(
+                score,
+                ft.Container(
+                    content=ft.Stack(controls=[image, score_counter]),
+                    on_click=score_up,
+                    margin=ft.Margin(0, 0, 0, 50)
+                ),
+                ft.Container(
+                    content=progress_bar,
+                    border_radius=ft.BorderRadius(10, 10, 10, 10),
+                    margin=ft.Margin(0, 0, 0, 75)
+                ),
+                navbar
+            )
             text = 'Boobs page'
         elif int(event.data) == 1:
+            await page.clean_async()
+            temporary_text = ft.Text('Раздел Leaderboard в разработке')
+            await page.add_async(temporary_text, navbar)
             text = 'Leaderboard page'
         elif int(event.data) == 2:
+            await page.clean_async()
+            temporary_text = ft.Text('Раздел Boost в разработке')
+            await page.add_async(temporary_text, navbar)
             text = 'Boost page'
         else:
+            await page.clean_async()
+            temporary_text = ft.Text('Что-то пошло не так')
+            await page.add_async(temporary_text, navbar)
             text = 'Чет хуйня какая-то'
         page.snack_bar = ft.SnackBar(
             content=ft.Text(
