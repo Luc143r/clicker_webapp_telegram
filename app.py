@@ -58,11 +58,20 @@ async def main(page: ft.Page) -> None:
         await page.update_async()
 
 
-    async def click_navbar(event: ft.ContainerTapEvent) -> None:
+    async def click_leaderbord(event: ft.ContainerTapEvent) -> None:
         score.value = 0
+        text = ''
+        if int(event.data) == 0:
+            text = 'Boobs page'
+        elif int(event.data) == 1:
+            text = 'Leaderboard page'
+        elif int(event.data) == 2:
+            text = 'Boost page'
+        else:
+            text = 'Чет хуйня какая-то'
         page.snack_bar = ft.SnackBar(
             content=ft.Text(
-                value='Получение ивента свапа навбара',
+                value=text,
                 size=25,
                 color='#ff8b1f',
                 text_align=ft.TextAlign.CENTER
@@ -92,7 +101,7 @@ async def main(page: ft.Page) -> None:
         adaptive=True,
         bgcolor='#141221',
         height=65,
-        on_change=click_navbar
+        on_change=click_leaderbord
     )
     
     await page.add_async(
@@ -109,7 +118,6 @@ async def main(page: ft.Page) -> None:
         ),
         navbar
     )
-    #page.navigation_bar = navbar
 
 
 if __name__ == '__main__':
