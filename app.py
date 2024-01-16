@@ -81,11 +81,15 @@ async def main(page: ft.Page) -> None:
         elif int(event.data) == 1:
             await page.clean_async()
             temporary_text = ft.Text('Раздел Leaderboard в разработке')
-            await page.add_async(temporary_text, navbar)
+            await page.add_async(
+                top_one_user,
+                top_two_user,
+                navbar
+            )
             text = 'Leaderboard page'
         elif int(event.data) == 2:
             await page.clean_async()
-            temporary_text = ft.Text('Раздел Boost в разработке')
+            temporary_text = ft.Text('Хуев тебе под сраку. Пивка для рывка и погнал!')
             await page.add_async(temporary_text, navbar)
             text = 'Boost page'
         else:
@@ -106,6 +110,9 @@ async def main(page: ft.Page) -> None:
         await page.update_async()
 
 
+    '''
+    Boobs page layout
+    '''
     score = ft.Text(value='0', size=60, data=0)
     score_counter = ft.Text(size=50, animate_opacity=ft.Animation(duration=600, curve=ft.AnimationCurve.BOUNCE_IN))
     image = ft.Image(src='coin.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
@@ -128,6 +135,20 @@ async def main(page: ft.Page) -> None:
         on_change=click_leaderbord
     )
     
+    
+    '''
+    Leaderboard layout example
+    '''
+    top_one_user = ft.ListTile(
+        leading=ft.Icon(ft.icons.ONETWOTHREE),
+        title=ft.Text('@insearchofmyself666 топ 1, кто же еще')
+    )
+    top_two_user = ft.ListTile(
+        leading=ft.Icon(ft.icons.ONETWOTHREE),
+        title=ft.Text('@qzlegenda топ 2, так и быть')
+    )
+
+
     await page.add_async(
         score,
         ft.Container(
