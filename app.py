@@ -68,6 +68,7 @@ async def main(page: ft.Page) -> None:
     async def click_leaderbord(event: ft.ContainerTapEvent) -> None:
         score.value = 0
         text = ''
+        #Main page on navbar "Boobs"
         if int(event.data) == 0:
             await page.clean_async()
             await page.add_async(
@@ -85,6 +86,7 @@ async def main(page: ft.Page) -> None:
                 navbar
             )
             text = 'Boobs page'
+        #Leaderboard page on navbar
         elif int(event.data) == 1:
             await page.clean_async()
             temporary_text = ft.Text('Раздел Leaderboard в разработке')
@@ -94,6 +96,7 @@ async def main(page: ft.Page) -> None:
                 navbar
             )
             text = 'Leaderboard page'
+        #Boost page on navbar
         elif int(event.data) == 2:
             await page.clean_async()
             temporary_text = ft.Text('Хуев тебе под сраку. Пивка для рывка и погнал!')
