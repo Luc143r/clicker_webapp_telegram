@@ -66,7 +66,6 @@ async def main(page: ft.Page) -> None:
     Event handler on click leaderboard
     '''
     async def click_leaderbord(event: ft.ContainerTapEvent) -> None:
-        score.value = 0
         text = ''
         #Main page on navbar "Boobs"
         if int(event.data) == 0:
@@ -126,7 +125,7 @@ async def main(page: ft.Page) -> None:
     score = ft.Text(value='0', size=60, data=0)
     score_counter = ft.Text(size=50, animate_opacity=ft.Animation(duration=600, curve=ft.AnimationCurve.BOUNCE_IN))
     image = ft.Image(src='boobs.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
-    progress_bar = ft.ProgressBar(value=0, width=page.width-60, bar_height=15, color='#ff8b1f', bgcolor='#bf6524')
+    progress_bar = ft.ProgressBar(value=0, width=page.width-60, bar_height=20, color='#ff8b1f', bgcolor='#bf6524')
     navbar = ft.NavigationBar(
         destinations=[
             ft.NavigationDestination(icon=ft.icons.HOME_OUTLINED, 
