@@ -163,12 +163,6 @@ async def main(page: ft.Page) -> None:
         ),
         navbar
     )
-    
-    
-async def test_func_for_merger() -> bool:
-    print('Check merge')
-    return True
-
 
 if __name__ == '__main__':
     ft.app(target=main, view=None, port=8000)
