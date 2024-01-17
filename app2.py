@@ -1,8 +1,8 @@
-import asyncio
 import flet as ft
+import asyncio
 
 
-async def main(page: ft.Page) -> None:
+async def main(page: ft.Page):
     page.title = 'BoobsCoin'
     page.theme_mode = ft.ThemeMode.DARK
     page.bgcolor = '#141221'
@@ -66,56 +66,17 @@ async def main(page: ft.Page) -> None:
     Event handler on click leaderboard
     '''
     async def click_navbar(event: ft.ContainerTapEvent) -> None:
-        text = ''
         #Main page on navbar "Boobs"
         if int(event.data) == 0:
-            await page.clean_async()
-            await page.add_async(
-                score,
-                ft.Container(
-                    content=ft.Stack(controls=[image, score_counter]),
-                    on_click=score_up,
-                    margin=ft.Margin(0, 0, 0, 50)
-                ),
-                ft.Container(
-                    content=progress_bar,
-                    border_radius=ft.BorderRadius(10, 10, 10, 10),
-                    margin=ft.Margin(0, 0, 0, 75)
-                ),
-                navbar
-            )
-            text = 'Boobs page'
+            await route_home(event)
         #Leaderboard page on navbar
         elif int(event.data) == 1:
-            await page.clean_async()
-            temporary_text = ft.Text('Раздел Leaderboard в разработке')
-            await page.add_async(
-                top_one_user,
-                top_two_user,
-                navbar
-            )
-            text = 'Leaderboard page'
+            await route_leaderboard(event)
         #Boost page on navbar
         elif int(event.data) == 2:
-            await page.clean_async()
-            temporary_text = ft.Text('Хуев тебе под сраку. Пивка для рывка и погнал!')
-            await page.add_async(temporary_text, navbar)
-            text = 'Boost page'
+            await route_boost(event)
         else:
-            await page.clean_async()
-            temporary_text = ft.Text('Что-то пошло не так')
-            await page.add_async(temporary_text, navbar)
-            text = 'Чет хуйня какая-то'
-        page.snack_bar = ft.SnackBar(
-            content=ft.Text(
-                value=text,
-                size=25,
-                color='#ff8b1f',
-                text_align=ft.TextAlign.CENTER
-            ),
-            bgcolor='#25223a'
-        )
-        page.snack_bar.open = True
+            await route_home(event)
         await page.update_async()
 
 
@@ -143,8 +104,8 @@ async def main(page: ft.Page) -> None:
         height=65,
         on_change=click_navbar
     )
-    
-    
+
+
     '''
     Leaderboard layout example
     '''
@@ -158,23 +119,83 @@ async def main(page: ft.Page) -> None:
     )
 
 
-    '''
-    Starting layout main page
-    '''
-    await page.add_async(
-        score,
-        ft.Container(
-            content=ft.Stack(controls=[image, score_counter]),
-            on_click=score_up,
-            margin=ft.Margin(0, 0, 0, 50)
-        ),
-        ft.Container(
-            content=progress_bar,
-            border_radius=ft.BorderRadius(10, 10, 10, 10),
-            margin=ft.Margin(0, 0, 0, 75)
-        ),
-        navbar
-    )
+    async def route_home(event: ft.TapEvent) -> None:
+        await page.go_async('/')
+
+    async def route_leaderboard(event: ft.TapEvent) -> None:
+        await page.go_async('/leaderboard')
+
+    async def route_boost(event: ft.TapEvent) -> None:
+        await page.go_async('/boost')
+
+
+    async def route_change(route):
+        page.views.clear()
+        if page.route == '/':
+            page.views.append(
+            ft.View(
+                '/',
+                [
+                    score,
+                    ft.Container(
+                        content=ft.Stack(controls=[image, score_counter]),
+                        on_click=score_up,
+                        margin=ft.Margin(0, 0, 0, 50)
+                    ),
+                    ft.Container(
+                        content=progress_bar,
+                        border_radius=ft.BorderRadius(10, 10, 10, 10),
+                        margin=ft.Margin(0, 0, 0, 75)
+                    ),
+                    navbar,
+                ],
+                #avigation_bar=navbar,
+                vertical_alignment = ft.MainAxisAlignment.CENTER,
+                horizontal_alignment = ft.CrossAxisAlignment.CENTER,
+                bgcolor='#141221'
+            )
+        )
+        if page.route == '/leaderboard':
+            page.views.append(
+            ft.View(
+                '/leaderboard',
+                [
+                    top_one_user,
+                    top_two_user,
+                    navbar,
+                ],
+                #navigation_bar=navbar,
+                vertical_alignment = ft.MainAxisAlignment.CENTER,
+                horizontal_alignment = ft.CrossAxisAlignment.CENTER,
+                bgcolor='#141221'
+            )
+        )
+        if page.route == '/boost':
+            page.views.append(
+            ft.View(
+                '/boost',
+                [
+                    ft.Text('Хуев тебе под сраку. Пивка для рывка и погнал!'),
+                    navbar,
+                ],
+                #navigation_bar=navbar,
+                vertical_alignment = ft.MainAxisAlignment.CENTER,
+                horizontal_alignment = ft.CrossAxisAlignment.CENTER,
+                bgcolor='#141221'
+            )
+        )
+        await page.update_async()
+
+    async def view_pop(view):
+        page.views.pop()
+        top_view = page.views[-1]
+        await page.go_async(top_view.route)
+
+
+    page.on_route_change = route_change
+    page.on_view_pop = view_pop
+    await page.go_async(page.route)
+
 
 if __name__ == '__main__':
     try:
