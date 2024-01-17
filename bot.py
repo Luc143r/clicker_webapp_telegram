@@ -34,4 +34,10 @@ async def main() -> None:
     
     
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        text = 'Bot started'
+        print(f'{text:*^30}')
+        asyncio.run(main())
+    except:
+        text = 'Bot not stated'
+        print(f'{text:*^30}')

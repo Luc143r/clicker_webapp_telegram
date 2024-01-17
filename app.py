@@ -11,6 +11,10 @@ async def main(page: ft.Page) -> None:
     page.fonts = {'JetBrainsMono': 'fonts/JetBrainsMono.ttf'}
     page.theme = ft.Theme(font_family='JetBrainsMono')
 
+
+    '''
+    Event handler on click coin
+    '''
     async def score_up(event: ft.ContainerTapEvent) -> None:
         score.data += 1
         score.value = str(score.data)
@@ -58,6 +62,9 @@ async def main(page: ft.Page) -> None:
         await page.update_async()
 
 
+    '''
+    Event handler on click leaderboard
+    '''
     async def click_leaderbord(event: ft.ContainerTapEvent) -> None:
         score.value = 0
         text = ''
@@ -111,11 +118,11 @@ async def main(page: ft.Page) -> None:
 
 
     '''
-    Boobs page layout
+    Main page layout
     '''
     score = ft.Text(value='0', size=60, data=0)
     score_counter = ft.Text(size=50, animate_opacity=ft.Animation(duration=600, curve=ft.AnimationCurve.BOUNCE_IN))
-    image = ft.Image(src='coin.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
+    image = ft.Image(src='boobs.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
     progress_bar = ft.ProgressBar(value=0, width=page.width-60, bar_height=15, color='#ff8b1f', bgcolor='#bf6524')
     navbar = ft.NavigationBar(
         destinations=[
@@ -149,6 +156,9 @@ async def main(page: ft.Page) -> None:
     )
 
 
+    '''
+    Starting layout main page
+    '''
     await page.add_async(
         score,
         ft.Container(
@@ -165,4 +175,10 @@ async def main(page: ft.Page) -> None:
     )
 
 if __name__ == '__main__':
-    ft.app(target=main, view=None, port=8000)
+    try:
+        text = 'App started'
+        print(f'{text:*^30}')
+        ft.app(target=main, view=None, port=8000)
+    except:
+        text = 'App not started'
+        print(f'{text:*^30}')
