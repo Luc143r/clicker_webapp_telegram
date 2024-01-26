@@ -1,4 +1,10 @@
-'''from views.main_view import Mainpage
+from views.boobs import BoobsView
+from views.leaderboard import LeaderboardView
+from views.boost import BoostsView
 
 
-boobs = Mainpage(width)'''
+__all__ = [
+    'BoobsView',
+    'LeaderboardView',
+    'BoostsView'
+]
