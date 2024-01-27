@@ -5,7 +5,7 @@ from aiohttp.web_request import Request
 import requests
 
 
-async def main(page: ft.Page):
+def main(page: ft.Page):
     #Page settings
     page.title = 'BoobsCoin'
     page.theme_mode = ft.ThemeMode.DARK
@@ -13,20 +13,20 @@ async def main(page: ft.Page):
     page.theme = ft.Theme(font_family='JetBrainsMono')
     
     
-    async def click_navbar(event: ft.TapEvent) -> None:
+    def click_navbar(event: ft.TapEvent) -> None:
         #Boobs page on navbar
         if int(event.data) == 0:
-            await page.go_async("/boobs")
+            page.go("/boobs")
         #Leaderboard page on navbar
         elif int(event.data) == 1:
-            await page.go_async("/leaderboard")
+            page.go("/leaderboard")
         #Boost page on navbar
         elif int(event.data) == 2:
-            await page.go_async("/boost")
+            page.go("/boost")
         else:
-            await page.go_async("/boobs")
+            page.go("/boobs")
 
-        await page.update_async()
+        page.update()
         
     
     navbar = ft.NavigationBar(
@@ -48,11 +48,11 @@ async def main(page: ft.Page):
     )
     
     #Method routing
-    async def router(route: str) -> None:
+    def router(route: str) -> None:
         page.views.clear()
         if page.route == "/":
             #handler get data webapp
-            await page.go_async("/boobs")
+            page.go("/boobs")
         elif page.route == "/boobs":
             page.views.append(BoobsView(page, navbar))
         elif page.route == "/leaderboard":
@@ -62,11 +62,11 @@ async def main(page: ft.Page):
         else:
             page.views.append(BoobsView(page, navbar))
         
-        await page.update_async()
+        page.update()
 
 
     page.on_route_change = router
-    await page.go_async("/")
+    page.go("/")
 
 
 if __name__ == '__main__':
