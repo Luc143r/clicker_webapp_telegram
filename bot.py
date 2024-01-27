@@ -12,7 +12,7 @@ from config import token
 def webapp_builder() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text='Сюда тыкай да', web_app=WebAppInfo(
-        url='https://52ds1b7g-8000.euw.devtunnels.ms/'
+        url='https://52ds1b7g-8000.euw.devtunnels.ms/',
     ))
     return builder.as_markup()
 

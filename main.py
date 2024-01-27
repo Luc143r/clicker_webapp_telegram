@@ -1,7 +1,11 @@
 import flet as ft
 from views import BoobsView, LeaderboardView, BoostsView
+from handlers import get_user
+from aiohttp.web_request import Request
+import requests
 
-def main(page: ft.Page):
+
+async def main(page: ft.Page):
     #Page settings
     page.title = 'BoobsCoin'
     page.theme_mode = ft.ThemeMode.DARK
@@ -9,20 +13,20 @@ def main(page: ft.Page):
     page.theme = ft.Theme(font_family='JetBrainsMono')
     
     
-    def click_navbar(event: ft.TapEvent) -> None:
+    async def click_navbar(event: ft.TapEvent) -> None:
         #Boobs page on navbar
         if int(event.data) == 0:
-            page.go("/")
+            await page.go_async("/boobs")
         #Leaderboard page on navbar
         elif int(event.data) == 1:
-            page.go("/leaderboard")
+            await page.go_async("/leaderboard")
         #Boost page on navbar
         elif int(event.data) == 2:
-            page.go("/boost")
+            await page.go_async("/boost")
         else:
-            page.go("/")
+            await page.go_async("/boobs")
 
-        page.update()
+        await page.update_async()
         
     
     navbar = ft.NavigationBar(
@@ -44,10 +48,12 @@ def main(page: ft.Page):
     )
     
     #Method routing
-    def router(route: str) -> None:
+    async def router(route: str) -> None:
         page.views.clear()
-        
         if page.route == "/":
+            #handler get data webapp
+            await page.go_async("/boobs")
+        elif page.route == "/boobs":
             page.views.append(BoobsView(page, navbar))
         elif page.route == "/leaderboard":
             page.views.append(LeaderboardView(page, navbar))
@@ -56,11 +62,11 @@ def main(page: ft.Page):
         else:
             page.views.append(BoobsView(page, navbar))
         
-        page.update()
+        await page.update_async()
 
 
     page.on_route_change = router
-    page.go("/")
+    await page.go_async("/")
 
 
 if __name__ == '__main__':
