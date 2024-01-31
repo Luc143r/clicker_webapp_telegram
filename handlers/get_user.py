@@ -5,6 +5,9 @@ from fastapi import Request, HTTPException
 import json
 from json import JSONDecodeError
 
+import sys
+import os
+sys.path.append(os.path.join(sys.path[0], '../'))
 from data import db
 
 
@@ -30,7 +33,7 @@ async def get_user(request: Request):
         try:
             result = await request.json()
             print(result)
-            
+            db.add_user(result['user_id'], result['username'])
         except JSONDecodeError:
             print('Invalid JSON data')
             raise HTTPException(status_code=400, detail='Invalid JSON data')
