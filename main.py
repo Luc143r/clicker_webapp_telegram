@@ -51,7 +51,6 @@ def main(page: ft.Page):
     def router(route: str) -> None:
         page.views.clear()
         if page.route == "/":
-            #handler get data webapp
             page.go("/boobs")
         elif page.route == "/boobs":
             page.views.append(BoobsView(page, navbar))

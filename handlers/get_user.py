@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from fastapi import Request, HTTPException
-from pydantic import BaseModel
+
 import json
 from json import JSONDecodeError
+
+from data import db
+
 
 app = FastAPI()
 
@@ -28,7 +30,7 @@ async def get_user(request: Request):
         try:
             result = await request.json()
             print(result)
-            return await request.json()
+            
         except JSONDecodeError:
             print('Invalid JSON data')
             raise HTTPException(status_code=400, detail='Invalid JSON data')
