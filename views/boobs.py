@@ -1,5 +1,6 @@
 import flet as ft
 import asyncio
+from data import db
 
 
 class BoobsView(ft.View):
