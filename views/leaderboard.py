@@ -19,7 +19,7 @@ class LeaderboardView(ft.View):
         )
         rows = self.get_leaderboard_rows()
         for row in rows:
-            self.leaderboard.rows.insert(len(self.get_leaderboard_rows()), row)
+            self.leaderboard.rows.insert(len(rows), row)
 
         self.controls = [
             self.leaderboard,
@@ -27,23 +27,13 @@ class LeaderboardView(ft.View):
         ]
 
     def get_leaderboard_rows(self):
-        class Users:
-            def __init__(self, user_id, username, point):
-                self.user_id = user_id
-                self.username = username
-                self.point = point
-
-        users = []
-        db_request = db.get_all_users()
-        for user in db_request:
-            users.append(Users(user['user_id'], user['username'], user['point']))
-
         table = []
+        users = db.get_all_users()
         for user in users:
             table.append(ft.DataRow(
                 cells=[
-                    ft.DataCell(ft.TextButton(text=user.username)),
-                    ft.DataCell(ft.Text(str(user.point)))
+                    ft.DataCell(ft.TextButton(text=f"@{user['username']}", url=f"https://t.me/{user['username']}")),
+                    ft.DataCell(ft.Text(str(user['point'])))
                 ]
             ))
         return table
