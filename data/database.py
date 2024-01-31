@@ -41,7 +41,7 @@ class Database:
     
     @db_session
     def get_all_users(self, cursor: pymysql.cursors.DictCursor):
-        cursor.execute("SELECT * FROM users")
+        cursor.execute("SELECT * FROM users ORDER BY point DESC")
         return cursor.fetchall()
         
     @db_session
