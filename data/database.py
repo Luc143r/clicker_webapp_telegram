@@ -38,6 +38,11 @@ class Database:
     def get_user(self, user_id: str, cursor: pymysql.cursors.DictCursor):
         cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id))
         return cursor.fetchone()
+    
+    @db_session
+    def get_all_users(self, cursor: pymysql.cursors.DictCursor):
+        cursor.execute("SELECT * FROM users")
+        return cursor.fetchall()
         
     @db_session
     def update_user_point(self, user_id: str, point: int, cursor: pymysql.cursors.DictCursor):
