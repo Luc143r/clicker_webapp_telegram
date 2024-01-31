@@ -16,9 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class User(BaseModel):
-    user_id: int
-
 
 @app.post("/get-data")
 async def get_user(request: Request):
