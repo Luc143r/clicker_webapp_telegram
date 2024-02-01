@@ -1,30 +1,6 @@
 import pymysql
 
 
-'''def db_session(method):
-    def wrapper(self, *args, **kwargs):
-        connection = pymysql.connect(
-            host='localhost',
-            port=3306,
-            user='root',
-            password='root',
-            cursorclass=pymysql.cursors.DictCursor
-        )
-        cursor = connection.cursor()
-        try:
-            connection.begin()
-            return method(self, *args, **kwargs, cursor=cursor)
-        except pymysql.err.IntegrityError as err:
-            if err.args[0] == 1062:
-                print('Дублирование данных. Пользователь уже зарегистрирован')
-                connection.rollback()
-        finally:
-            connection.commit()
-            cursor.close()
-            connection.close()
-    return wrapper'''
-
-
 def db_session(method):
     def wrapper(self, *args, **kwargs):
         connection = pymysql.connect(
