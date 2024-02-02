@@ -1,6 +1,7 @@
 import flet as ft
 import asyncio
 from data import db
+from handlers import get_user_id
 
 
 class BoobsView(ft.View):
@@ -15,7 +16,8 @@ class BoobsView(ft.View):
         self.image = ft.Image(src='boobs.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
         self.progress_bar = ft.ProgressBar(value=0, width=self.page.width-60, bar_height=20, color='#ff8b1f', bgcolor='#bf6524')
         self.navbar = navbar
-        
+
+
         self.controls = [
             self.score,
             ft.Container(
@@ -31,7 +33,7 @@ class BoobsView(ft.View):
             self.navbar
         ]
     
-    def score_up(self, event: ft.ContainerTapEvent) -> None:
+    async def score_up(self, event: ft.ContainerTapEvent) -> None:
         self.score.data += 1
         self.score.value = str(self.score.data)
         
@@ -43,6 +45,9 @@ class BoobsView(ft.View):
         self.score_counter.top = event.local_y
         self.score_counter.bottom = 0
         self.progress_bar.value += (1 / 100)
+        
+        #Record point to database
+        #db.update_user_point(user_id=, point=self.score.data, cursor=db.cursor)
         
         if self.score.data % 100 == 0:
             self.page.snack_bar = ft.SnackBar(
@@ -70,9 +75,9 @@ class BoobsView(ft.View):
             self.page.snack_bar.open = True
             self.progress_bar.value = 0
         
-        self.page.update()
+        #print(get_user_id())
+        await self.page.update_async()
         
         self.image.scale = 1
         self.score_counter.opacity = 0
-        self.page.update()
-        
+        await self.page.update_async()
