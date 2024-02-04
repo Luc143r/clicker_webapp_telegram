@@ -1,7 +1,6 @@
 import flet as ft
 import asyncio
 from data import db
-from handlers import get_user_id
 
 
 class BoobsView(ft.View):
@@ -13,7 +12,7 @@ class BoobsView(ft.View):
         self.page = page
         self.score = ft.Text(value='0', size=60, data=0)
         self.score_counter = ft.Text(size=50, animate_opacity=ft.Animation(duration=600, curve=ft.AnimationCurve.BOUNCE_IN))
-        self.image = ft.Image(src='boobs.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
+        self.image = ft.Image(src='coin.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
         self.progress_bar = ft.ProgressBar(value=0, width=self.page.width-60, bar_height=20, color='#ff8b1f', bgcolor='#bf6524')
         self.navbar = navbar
 
@@ -75,7 +74,7 @@ class BoobsView(ft.View):
             self.page.snack_bar.open = True
             self.progress_bar.value = 0
         
-        #print(get_user_id())
+
         await self.page.update_async()
         
         self.image.scale = 1

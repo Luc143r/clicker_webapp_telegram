@@ -1,10 +1,8 @@
 import flet as ft
 
 from views import BoobsView, LeaderboardView, BoostsView
-from handlers import get_user
 
-from aiohttp.web_request import Request
-import requests
+import aiohttp
 import asyncio
 
 
@@ -54,13 +52,29 @@ async def main(page: ft.Page):
     boobs_page = BoobsView(page, navbar)
     leaderboard_page = LeaderboardView(page, navbar)
     boost_page = BoostsView(page, navbar)
+    user_sessions = {}
+    
+    async def fetch_user_data():
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://52ds1b7g-8080.euw.devtunnels.ms/get-user') as response:
+                try:
+                    response = await response.json()
+                    user_id = response[0]['user_id']
+                    username = response[0]['username']
+                    return [user_id, username]
+                finally:
+                    await session.close()
     
     #Method routing
     async def router(route: str) -> None:
         page.views.clear()
         if page.route == "/":
+            user_data = await fetch_user_data()
+            user_sessions[str(page._session_id)] = user_data[0]
+            print(f'User_sessions dict: {user_sessions}')
             await page.go_async("/boobs")
         elif page.route == "/boobs":
+            print(f'User session value: {user_sessions[str(page._session_id)]}')
             page.views.append(boobs_page)
         elif page.route == "/leaderboard":
             page.views.append(leaderboard_page)
@@ -70,8 +84,11 @@ async def main(page: ft.Page):
             page.views.append(boobs_page)
         
         await page.update_async()
-
-
+        
+    # async def close_session() -> None:
+    #     del user_sessions[str(page._session_id)]
+    #     print(f'User_sessions dict: {user_sessions}\nPage closed')
+    
     page.on_route_change = router
     await page.go_async("/")
 
