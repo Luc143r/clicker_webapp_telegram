@@ -4,6 +4,7 @@ from views import BoobsView, LeaderboardView, BoostsView
 
 import aiohttp
 import asyncio
+from fastapi import HTTPException
 
 
 async def main(page: ft.Page):
@@ -52,16 +53,21 @@ async def main(page: ft.Page):
     boobs_page = BoobsView(page, navbar)
     leaderboard_page = LeaderboardView(page, navbar)
     boost_page = BoostsView(page, navbar)
-    user_sessions = {}
     
+
     async def fetch_user_data():
         async with aiohttp.ClientSession() as session:
-            async with session.get('https://52ds1b7g-8080.euw.devtunnels.ms/get-user') as response:
+            async with session.get('https://52ds1b7g-8080.euw.devtunnels.ms/get-user', headers={'Content-Type': 'application/json'}) as response:
                 try:
                     response = await response.json()
-                    user_id = response[0]['user_id']
-                    username = response[0]['username']
+                    print(response)
+                    user_id = response['user_id']
+                    username = response['username']
                     return [user_id, username]
+                except:
+                    print('Invalid JSON data')
+                    print(response)
+                    raise HTTPException(status_code=400, detail='Invalid JSON data')
                 finally:
                     await session.close()
     
@@ -70,11 +76,10 @@ async def main(page: ft.Page):
         page.views.clear()
         if page.route == "/":
             user_data = await fetch_user_data()
-            user_sessions[str(page._session_id)] = user_data[0]
-            print(f'User_sessions dict: {user_sessions}')
+            page.session.set(str(page._session_id), user_data[0])
             await page.go_async("/boobs")
         elif page.route == "/boobs":
-            print(f'User session value: {user_sessions[str(page._session_id)]}')
+            print(page.session.get(str(page._session_id)))
             page.views.append(boobs_page)
         elif page.route == "/leaderboard":
             page.views.append(leaderboard_page)
@@ -85,11 +90,12 @@ async def main(page: ft.Page):
         
         await page.update_async()
         
-    # async def close_session() -> None:
-    #     del user_sessions[str(page._session_id)]
-    #     print(f'User_sessions dict: {user_sessions}\nPage closed')
+    async def close_session(event) -> None:
+        page.session.remove(str(page._session_id))
+        print(f'User_sessions dict: {page.session.get_keys()}\nPage closed')
     
     page.on_route_change = router
+    page.on_disconnect = close_session
     await page.go_async("/")
 
 

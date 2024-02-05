@@ -44,9 +44,7 @@ class BoobsView(ft.View):
         self.score_counter.top = event.local_y
         self.score_counter.bottom = 0
         self.progress_bar.value += (1 / 100)
-        
-        #Record point to database
-        #db.update_user_point(user_id=, point=self.score.data, cursor=db.cursor)
+
         
         if self.score.data % 100 == 0:
             self.page.snack_bar = ft.SnackBar(

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Request, HTTPException
+from fastapi.responses import JSONResponse
 
 import json
 from json import JSONDecodeError
@@ -45,7 +46,7 @@ async def get_user(request: Request):
             print(f'\n{datetime.now()}\n/get-data\nUser ID: {user_id}; Username: {username}')
             db.add_user(result['user_id'], result['username'])
             user_id = result['user_id']
-            return {'user_id': user_id, 'username': username}
+            return JSONResponse(status_code=200, content=result)
         except JSONDecodeError:
             print('Invalid JSON data')
             raise HTTPException(status_code=400, detail='Invalid JSON data')
@@ -56,5 +57,10 @@ async def get_user(request: Request):
 
 @app.get("/get-user")
 async def get_user_id():
+    global user_id
+    global username
+    user_data = {'user_id': user_id, 'username': username}
+    user_id = ''
+    username = ''
     print(f'\n{datetime.now()}\n/get-user\nUser ID: {user_id}; Username: {username}')
-    return {'user_id': user_id, 'username': username}, "application/json"
+    return JSONResponse(content=user_data, media_type="application/json")
