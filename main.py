@@ -102,7 +102,6 @@ async def main(page: ft.Page):
         elif page.route == "/boobs":
             page.views.append(boobs_page)
         elif page.route == "/leaderboard":
-            page.session.set(str(page.session.get(str(page._session_id))), boobs_page.score.value)
             page.views.append(leaderboard_page)
         elif page.route == '/boost':
             page.views.append(boost_page)
