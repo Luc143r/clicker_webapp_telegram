@@ -36,6 +36,8 @@ class BoobsView(ft.View):
         self.score.data += 1
         self.score.value = str(self.score.data)
         
+        self.page.session.set(str(self.page.session.get(str(self.page._session_id))), self.score.data)
+        
         self.image.scale = 0.95
         self.score_counter.opacity = 50
         self.score_counter.value = "+1"

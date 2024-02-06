@@ -64,3 +64,7 @@ async def get_user_id():
     username = ''
     print(f'\n{datetime.now()}\n/get-user\nUser ID: {user_id}; Username: {username}')
     return JSONResponse(content=user_data, media_type="application/json")
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8080)

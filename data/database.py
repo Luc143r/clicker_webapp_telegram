@@ -56,6 +56,12 @@ class Database:
         return cursor.fetchone()
     
     @db_session
+    def get_point_user(self, user_id: str, cursor: pymysql.cursors.DictCursor):
+        cursor.execute("USE `boobscoin`")
+        cursor.execute("SELECT point FROM users WHERE user_id = %s", (user_id))
+        return cursor.fetchone()['point']
+    
+    @db_session
     def get_all_users(self, cursor: pymysql.cursors.DictCursor):
         cursor.execute("USE `boobscoin`")
         cursor.execute("SELECT * FROM users ORDER BY point DESC")
