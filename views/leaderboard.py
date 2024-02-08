@@ -28,7 +28,7 @@ class LeaderboardView(ft.View):
 
     def get_leaderboard_rows(self):
         table = []
-        users = db.get_all_users()
+        users = db.get_all_users()[:10]
         for user in users:
             table.append(ft.DataRow(
                 cells=[
