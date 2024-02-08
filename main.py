@@ -8,6 +8,7 @@ import asyncio
 
 import requests
 from fastapi import HTTPException
+from configs.config_reader import Config
 
 
 # Дорогой разработчик:
@@ -73,7 +74,7 @@ async def main(page: ft.Page):
 
     async def fetch_user_data():
         async with aiohttp.ClientSession() as session:
-            async with session.get('https://52ds1b7g-8080.euw.devtunnels.ms/get-user', headers={'Content-Type': 'application/json'}) as response:
+            async with session.get(f'{Config.API_URL}/get-user', headers={'Content-Type': 'application/json'}) as response:
                 try:
                     response = await response.json()
                     print(response)
@@ -86,19 +87,7 @@ async def main(page: ft.Page):
                     raise HTTPException(status_code=400, detail='Invalid JSON data')
                 finally:
                     await session.close()
-    
-    def test_get_user():
-        try:
-            response = requests.get('https://52ds1b7g-8080.euw.devtunnels.ms/get-user', headers={'Content-Type': 'application/json'})
-            response.raise_for_status()  # Raise exception for bad status codes
-            data = response.json()
-            print(data)
-            user_id = data['user_id']
-            username = data['username']
-            return [user_id, username]
-        except requests.exceptions.RequestException as e:
-            print('Request error:', e)
-            raise HTTPException(status_code=400, detail='Error fetching user data')
+
     
     #Method routing
     async def router(route: str) -> None:

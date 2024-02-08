@@ -1,13 +1,14 @@
 import pymysql
+from configs.config_reader import Config
 
 
 def db_session(method):
     def wrapper(self, *args, **kwargs):
         connection = pymysql.connect(
-            host='localhost',
-            port=3306,
-            user='root',
-            password='root',
+            host=Config.DB_HOST,
+            port=Config.DB_PORT,
+            user=Config.DB_USER,
+            password=Config.DB_PASSWORD,
             cursorclass=pymysql.cursors.DictCursor
         )
         try:
