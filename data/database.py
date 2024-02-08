@@ -43,6 +43,12 @@ class Database:
                         "username varchar(32)," \
                         "point int," \
                         "PRIMARY KEY(id))")
+        cursor.execute("CREATE TABLE IF NOT EXISTS `boosts`(id int AUTO_INCREMENT," \
+                        "user_id int," \
+                        "name_boost varchar(46)," \
+                        "lvl_boost int," \
+                        "PRIMARY KEY(id)," \
+                        "FOREIGN KEY (user_id) REFERENCES users(id))")
         
     @db_session
     def add_user(self, user_id: str, username: str, cursor: pymysql.cursors.DictCursor):
@@ -71,3 +77,38 @@ class Database:
     def update_user_point(self, user_id: str, point: int, cursor: pymysql.cursors.DictCursor):
         cursor.execute("USE `boobscoin`")
         cursor.execute("UPDATE users SET point = %s WHERE user_id = %s", (point, user_id))
+
+
+    @db_session
+    def add_boost(self, user_id: str, name_boost: str, lvl_boost: int, cursor: pymysql.cursors.DictCursor):
+        cursor.execute("USE `boobscoin`")
+        cursor.execute("SELECT id FROM users WHERE user_id = %s", (user_id))
+        user_id = cursor.fetchone()['id']
+        cursor.execute("SELECT * FROM boosts WHERE user_id = %s AND name_boost = %s", (user_id, name_boost))
+        if cursor.fetchone():
+            return False
+        else:
+            cursor.execute("INSERT INTO boosts (user_id, name_boost, lvl_boost) VALUES (%s, %s, %s)",
+                           (user_id, name_boost, lvl_boost))
+
+    @db_session
+    def get_boost(self, user_id: str, cursor: pymysql.cursors.DictCursor):
+        cursor.execute("USE `boobscoin`")
+        cursor.execute("SELECT id FROM users WHERE user_id = %s", (user_id))
+        user_id = cursor.fetchone()['id']
+        cursor.execute("SELECT boosts.name_boost, boosts.lvl_boost FROM boosts WHERE user_id = %s", (user_id))
+        return cursor.fetchall()
+    
+    @db_session
+    def get_boost_lvl(self, user_id: str, name_boost: str, cursor: pymysql.cursors.DictCursor):
+        cursor.execute("USE `boobscoin`")
+        cursor.execute("SELECT id FROM users WHERE user_id = %s", (user_id))
+        user_id = cursor.fetchone()['id']
+        cursor.execute("SELECT lvl_boost FROM boosts WHERE user_id = %s AND name_boost = %s", (user_id, name_boost))
+        return cursor.fetchone()['lvl_boost']
+    
+    @db_session
+    def update_boost(self, user_id: str, name_boost: str, lvl_boost: int, cursor: pymysql.cursors.DictCursor):
+        cursor.execute("USE `boobscoin`")
+        cursor.execute("UPDATE boosts SET lvl_boost = %s WHERE user_id = (SELECT id FROM users WHERE user_id = %s) AND name_boost = %s",
+                       (lvl_boost, user_id, name_boost))
