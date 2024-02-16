@@ -74,7 +74,7 @@ async def main(page: ft.Page):
 
     async def fetch_user_data():
         async with aiohttp.ClientSession() as session:
-            async with session.get(f'{Config.get_config("config").API_URL}/get-user', headers={'Content-Type': 'application/json'}) as response:
+            async with session.get(f'{Config.get_config(0, "config_app").API_URL}/get-user', headers={'Content-Type': 'application/json'}) as response:
                 try:
                     response = await response.json()
                     print(response)
@@ -107,7 +107,6 @@ async def main(page: ft.Page):
             page.views.append(leaderboard_page)
         elif page.route == '/boost':
             page.views.append(boost_page)
-            await page.window_close_async()
         else:
             page.views.append(boobs_page)
         

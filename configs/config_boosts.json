@@ -1,0 +1,6 @@
+{
+    "NAME": "PowerClick",
+    "START_PRICE": 10000,
+    "PRICE_STEP": 1.6,
+    "MAX_LVL": 100
+  }

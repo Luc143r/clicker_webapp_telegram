@@ -5,10 +5,10 @@ from configs.config_reader import Config
 def db_session(method):
     def wrapper(self, *args, **kwargs):
         connection = pymysql.connect(
-            host=Config.get_config('config').DB_HOST,
-            port=Config.get_config('config').DB_PORT,
-            user=Config.get_config('config').DB_USER,
-            password=Config.get_config('config').DB_PASSWORD,
+            host=Config.get_config(0, "config_app").DB_HOST,
+            port=Config.get_config(0, "config_app").DB_PORT,
+            user=Config.get_config(0, "config_app").DB_USER,
+            password=Config.get_config(0, "config_app").DB_PASSWORD,
             cursorclass=pymysql.cursors.DictCursor
         )
         try:

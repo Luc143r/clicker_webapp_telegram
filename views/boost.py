@@ -1,4 +1,5 @@
 import flet as ft
+from configs.config_reader import Config
 
 
 class BoostsView(ft.View):
