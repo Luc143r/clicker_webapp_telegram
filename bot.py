@@ -6,13 +6,13 @@ from aiogram.filters import CommandStart
 from aiogram.enums import ParseMode
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from config import token
+from configs.config_reader import Config
 
 
 def webapp_builder() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text='Сюда тыкай да', web_app=WebAppInfo(
-        url='https://52ds1b7g-8000.euw.devtunnels.ms/',
+        url=Config.get_config('config').API_URL,
     ))
     return builder.as_markup()
 
@@ -24,7 +24,7 @@ async def start(message: Message) -> None:
                         reply_markup=webapp_builder())
     
 async def main() -> None:
-    bot = Bot(token=token, parse_mode=ParseMode.HTML)
+    bot = Bot(token=Config.get_config('config').TOKEN, parse_mode=ParseMode.HTML)
     
     dp = Dispatcher()
     dp.include_router(router)

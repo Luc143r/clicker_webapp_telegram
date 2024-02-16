@@ -1,0 +1,8 @@
+{
+  "TOKEN": "6811714842:AAGcVjk94iSnr0gyjAUTyoX-Q53t-OrXNEE",
+  "API_URL": "https://52ds1b7g-8080.euw.devtunnels.ms",
+  "DB_HOST": "localhost",
+  "DB_PORT": 3306,
+  "DB_USER": "root",
+  "DB_PASSWORD": "root"
+}
