@@ -45,7 +45,7 @@ async def get_user(request: Request):
             username = result['username']
             print(f'\n{datetime.now()}\n/get-data\nUser ID: {user_id}; Username: {username}')
             db.add_user(result['user_id'], result['username'])
-            db.add_boost(result['user_id'], "power_click", 0)
+            db.add_boost(result['user_id'], "power_click", 1)
             return JSONResponse(status_code=200, content=result)
         except JSONDecodeError:
             print('Invalid JSON data')

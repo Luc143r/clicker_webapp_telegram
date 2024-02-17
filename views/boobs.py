@@ -15,6 +15,8 @@ class BoobsView(ft.View):
         self.image = ft.Image(src='coin.png', fit=ft.ImageFit.CONTAIN, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE))
         self.progress_bar = ft.ProgressBar(value=0, width=self.page.width-60, bar_height=20, color='#ff8b1f', bgcolor='#bf6524')
         self.navbar = navbar
+        
+        self.power_click = 1
 
 
         self.controls = [
@@ -33,14 +35,14 @@ class BoobsView(ft.View):
         ]
     
     async def score_up(self, event: ft.ContainerTapEvent) -> None:
-        self.score.data += 1
+        self.score.data += self.power_click
         self.score.value = str(self.score.data)
         
         self.page.session.set(str(self.page.session.get(str(self.page._session_id))), self.score.data)
         
         self.image.scale = 0.95
         self.score_counter.opacity = 50
-        self.score_counter.value = "+1"
+        self.score_counter.value = f'+{self.power_click}'
         self.score_counter.right = 0
         self.score_counter.left = event.local_x
         self.score_counter.top = event.local_y

@@ -21,7 +21,7 @@ from configs.config_reader import Config
 # пожалуйста, увеличь значение счётчика
 # как предупреждение для следующего человека:
     
-# Часов_потрачено_здесь = 129
+# Часов_потрачено_здесь = 161
 
 
 async def main(page: ft.Page):
@@ -97,15 +97,29 @@ async def main(page: ft.Page):
             user_data = await fetch_user_data()
             if user_data[0]:
                 user_point = db.get_point_user(user_data[0])
+                page.session.set(str(page._session_id), user_data[0])
+                power_click_lvl = db.get_boost_lvl(str(page.session.get(str(page._session_id))), 'power_click')
+                page.session.set('power_click', power_click_lvl)
+                
                 boobs_page.score.data = int(user_point)
                 boobs_page.score.value = str(user_point)
-            page.session.set(str(page._session_id), user_data[0])
-            page.session.set(str(page.session.get(str(page._session_id))), boobs_page.score.value)
+                boobs_page.power_click = int(page.session.get('power_click'))
+                page.session.set(str(page.session.get(str(page._session_id))), boobs_page.score.value)
         elif page.route == "/boobs":
+            if page.session.get('power_click'):
+                boobs_page.power_click = int(page.session.get('power_click'))
             page.views.append(boobs_page)
         elif page.route == "/leaderboard":
             page.views.append(leaderboard_page)
         elif page.route == '/boost':
+            if page.session.get('power_click'):
+                boost_page.power_click_lvl.data = int(page.session.get('power_click'))
+                boost_page.power_click_lvl.value = f'LVL: {str(page.session.get("power_click"))}'
+                if page.session.get('power_click') != 0:
+                    index_price = float(Config.get_config(1, 'config_boosts').PRICE_STEP) ** int(page.session.get('power_click'))
+                    final_price = int(Config.get_config(1, 'config_boosts').START_PRICE * index_price)
+                    boost_page.power_click_cost.data = int(final_price)
+                    boost_page.power_click_cost.value = str(final_price)
             page.views.append(boost_page)
         else:
             page.views.append(boobs_page)
